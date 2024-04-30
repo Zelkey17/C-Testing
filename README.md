@@ -11,16 +11,16 @@
 ```cpp
 // (1)
 void f() {
-		void g() {
-				// ...
-		}
+	void g() {
+		// ...
+	}
 }
 
 // (2)
 void g() {
-		auto f = []() {
-				// ...
-		};
+	auto f = []() {
+		// ...
+	};
 }
 ```
 
@@ -30,16 +30,16 @@ void g() {
 
 ```cpp
 void f(int a) {
-		// ...
+	// ...
 }
 
 void f(bool b) {
-		// ...
+	// ...
 }
 
 int main(int, char**) {
-		f(1);
-		f(false);
+    f(1);
+    f(false);
 }
 ```
 
@@ -47,7 +47,7 @@ int main(int, char**) {
 
 ```cpp
 void f() {
-		for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 100; ++i) {
         std::cout << i << ' ' << i * 100000000 << std::endl;
     }
 }
@@ -59,9 +59,9 @@ void f() {
 constexpr int N = 4;
 
 union U {
-		int a;
-		char b;
-		short c[N];
+    int a;
+    char b;
+    short c[N];
 };
 ```
 
@@ -86,28 +86,24 @@ struct C {
 
 ```cpp
 void f() {
-		delete (int*)nullptr;
+	delete (int*) nullptr;
 }
 ```
-
-### Ответ
-
-![Untitled](%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B%20a7e41da1c1e3482bb14aee1ec085b700/Untitled.png)
 
 ### 11. В чем различия поведения программы и памяти полученной следующими сегментами кода?
 
 ```cpp
 struct Char {
-		char c;
-		Char() : c(0) {}
+    char c;
+    Char() : c(0) {}
 };
 
 int main() {
-		// (1)
-		auto p1 = std::malloc(5);
-		
-		// (2)
-		auto p2 = new Char[5];
+    // (1)
+    auto p1 = std::malloc(5);
+    
+    // (2)
+    auto p2 = new Char[5];
 }
 ```
 
@@ -142,7 +138,7 @@ int main() {
 ```cpp
 [[noreturn]]
 void f() {
-		// ...
+    // ...
 }
 ```
 
@@ -152,16 +148,12 @@ void f() {
 #include <utility>
 
 void f() {
-		volatile int x = 1;
-		if (x % 2 == 0)
-				return;
-		std::unreachable();
+    volatile int x = 1;
+    if (x % 2 == 0)
+        return;
+    std::unreachable();
 }
 ```
-
-### Ответ
-
-![Untitled](%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B%20a7e41da1c1e3482bb14aee1ec085b700/Untitled%201.png)
 
 ### 24. Назовите все случаи, когда в коде программы может встречаться `...` (7 случаев).
 
@@ -173,7 +165,7 @@ void f() {
 - *`...*[]`
 - *fold expressions*
 
-### 25. Могут ли деструкторы вызывать исключения? Что произойдёт при выполнении данного кода?
+### 25.1. Могут ли деструкторы вызывать исключения? Что произойдёт при выполнении данного кода?
 
 ```cpp
 struct A {
@@ -184,8 +176,23 @@ struct A {
 };
 
 int main() {
-		try {
-		    A a, b, c;
+    try {
+        A a, b, c;
     } catch (...) { exit(0); }
 }
 ```
+### 25.2*. Что произойдёт если убрать `try` блок?
+
+```cpp
+struct A {
+    ~A() noexcept(false) {
+        std::cout << "~A()" << std::endl;
+        throw std::exception();
+    }
+};
+
+int main() {
+    A a, b, c;
+}
+```
+
